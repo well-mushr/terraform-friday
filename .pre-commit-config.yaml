@@ -1,0 +1,16 @@
+repos:
+  - repo: git://github.com/pre-commit/pre-commit-hooks
+    rev: v3.3.0
+    hooks:
+      - id: check-merge-conflict
+      - id: trailing-whitespace
+      - id: check-json
+      - id: detect-aws-credentials
+  - repo: git://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.43.0
+    hooks:
+      - id: terraform_fmt
+      - id: terraform_docs
+      - id: terraform_tflint
+      - id: terraform_tfsec
+      - id: checkov
