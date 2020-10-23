@@ -1,17 +1,44 @@
 locals {
   buckets = {
     asdf-crazy-berlin-weather-hourly = {
-      rule_name = "expiration-in-7-days",
-      days      = 7
+      lifecycle_rule = [
+        {
+          rule_name = "expiration-in-7-days"
+          enabled   = true
+
+          expiration = {
+            days = 7
+          }
+        }
+      ]
     },
     asdf-crazy-berlin-weather-daily = {
-      rule_name = "expiration-in-30-days",
-      days      = 30
+      lifecycle_rule = [
+        {
+          rule_name = "expiration-in-30-days"
+          enabled   = true
+
+          expiration = {
+            days = 30
+          }
+        }
+      ]
     },
     asdf-crazy-berlin-weather-weekly = {
-      rule_name = "expiration-in-120-days",
-      days      = 120
-    }
+      lifecycle_rule = [
+        {
+          rule_name = "transition-in-120-days"
+          enabled   = true
+
+          transition = [
+            {
+              days          = 120
+              storage_class = "STANDARD_IA"
+            }
+          ]
+        }
+      ]
+    },
   }
 }
 
@@ -22,14 +49,5 @@ module "s3" {
   bucket_name = each.key
   acl         = "private"
 
-  lifecycle_rule = [
-    {
-      rule_name = each.value.rule_name
-      enabled   = true
-
-      expiration = {
-        days = each.value.days
-      }
-    }
-  ]
+  lifecycle_rule = each.value.lifecycle_rule
 }
